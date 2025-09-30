@@ -1,0 +1,31 @@
+{
+  "name": "notes-agent",
+  "version": "0.1.0",
+  "description": "LLM-driven Notes CRUD assistant (Ollama + gpt-oss:20b)",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon --watch . --watch .env --ext js,json --exec \"node index.js\""
+  },
+  "keywords": [
+    "llm",
+    "notes",
+    "ollama",
+    "express"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "dotenv": "*",
+    "express": "*",
+    "ollama": "^0.6.0",
+    "uuid": "*"
+  },
+  "devDependencies": {
+    "nodemon": "*"
+  }
+}
