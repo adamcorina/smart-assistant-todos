@@ -1,16 +1,54 @@
-# React + Vite
+# Smart Assistant Todos — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the frontend for the Smart Assistant Todos app, built with **React** and **Vite**.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Sticky notes UI with fun colors and subtle random rotation
+- Scrollable notes grid
+- Fixed textarea at the bottom for sending messages to the assistant
+- Add, list, and update notes via backend API
+- Status badges for TODO/DONE
+- Responsive design
 
-## React Compiler
+## Getting Started
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Install dependencies
 
-## Expanding the ESLint configuration
+```sh
+npm install
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Run the development server
+
+```sh
+npm run dev
+```
+
+## Usage
+
+- The notes grid displays all notes returned from the backend.
+- Use the textarea at the bottom to send commands or add notes (e.g., "add buy milk").
+- Click **Refresh** to reload notes from the backend.
+
+## API
+
+The frontend communicates with the backend at `/message` via POST requests.
+
+## Tech Stack
+
+- [React](https://react.dev/)
+- [Vite](https://vitejs.dev/)
+- [Tailwind CSS](https://tailwindcss.com/) (for styling)
+- [TypeScript](https://www.typescriptlang.org/) (recommended)
+
+## Project Structure
+
+- `src/App.tsx` — Main app UI
+- `src/components/ui/` — UI components (Card, Button, Badge, etc.)
+- `src/lib/utils.ts` — Utility functions
+
+## Customization
+
+- Change sticky note colors in `stickyStyle()` in `App.tsx`.
+- Adjust grid layout via Tailwind
