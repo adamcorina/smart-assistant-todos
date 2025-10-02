@@ -49,14 +49,17 @@ export default function App() {
     setSending(true);
     setError(null);
     try {
-      const res = await fetch("http://localhost:3000/message", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ text: message }),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_API_URL}/message`,
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ text: message }),
+        }
+      );
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const payload = await res.json();
       setNotes(payload.notes ?? []);
