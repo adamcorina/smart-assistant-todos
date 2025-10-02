@@ -22,14 +22,17 @@ export default function App() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("http://localhost:3000/message", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ text: "list all notes" }),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_API_URL}/message`,
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ text: "list all notes" }),
+        }
+      );
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const payload = await res.json();
       setNotes(payload.notes ?? []);
