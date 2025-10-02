@@ -1,55 +1,30 @@
-const { Ollama } = require('ollama');
-const client = new Ollama({ host: 'http://127.0.0.1:11434' });
+// const { callOllama } = require('./ollama');
+const { callOpenAI } = require('./openai');
 
-const SYSTEM_PROMPT = `You are a Notes Assistant. ...`; // Use your existing prompt here
+const MAX_TEXT_LENGTH = 4000;
+const SYSTEM_PROMPT = `You are a Notes Assistant. You MUST respond with a JSON object matching exactly one of the allowed actions below.
+Allowed actions: add_note, list_notes, update_note, delete_note, no_op.
 
-async function callLLM(systemPrompt, userMessage, context) {
-  const notesSnapshot = (context && context.notes_snapshot) ? JSON.stringify(context.notes_snapshot) : "[]";
-  const schema = {
-    "title": "NotesAction",
-    "type": "object",
-    "required": ["action", "args"],
-    "properties": {
-      "action": {
-        "type": "string",
-        "enum": ["add_note", "list_notes", "update_note", "delete_note", "no_op"]
-      },
-      "args": {
-        "type": "object",
-        "properties": {
-          "text": { "type": ["string", "null"], "minLength": 1, "maxLength": 4000 },
-          "filter": { "type": ["string", "null"], "enum": ["all", "TODO", "DONE", null] },
-          "limit": { "type": ["integer", "null"], "minimum": 1 },
-          "id": {
-            "type": ["string", "null"],
-            "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
-          },
-          "status": { "type": ["string", "null"], "enum": ["TODO", "DONE", null] },
-          "message": { "type": ["string", "null"], "maxLength": 1000 }
-        },
-        "additionalProperties": false
-      }
-    },
-    "additionalProperties": false
-  };
 
-  const res = await client.chat({
-    model: "gemma3:1b",
-    messages: [
-      { role: "system", content: systemPrompt },
-      { role: "user", content: `${userMessage}\n\nNotes snapshot:\n${notesSnapshot}` }
-    ],
-    stream: false,
-    temperature: 0,
-    format: schema,
-  });
+Schemas (exact shape):
+- add_note -> {"action":"add_note","args":{"text":"<note text>"}}
+- list_notes -> {"action":"list_notes","args":{"filter":"all"|"TODO"|"DONE"|"recent:N","limit": integer|null}}
+- update_note -> {"action":"update_note","args":{"id":"<note id>","text":"<new text>|null","status":"TODO"|"DONE"|null}}
+- delete_note -> {"action":"delete_note","args":{"id":"<note id>"}}
+- no_op -> {"action":"no_op","args":{"message":"<informational message>"}}
 
-  const content = res?.message?.content ?? "";
-  try { return JSON.parse(content); } catch (e) {
-    const m = content.match(/\{[\s\S]*\}/);
-    if (m) try { return JSON.parse(m[0]); } catch (_) {}
-    return { action: "no_op", args: { message: "Could not parse LLM output." } };
-  }
+
+Rules:
+- Respond with exactly one JSON object and no additional text.
+- Use existing note IDs when referencing notes. If the user didn't provide an ID but intent implies update/delete, return list_notes so the app can prompt.
+- Trim text, max length ${MAX_TEXT_LENGTH} characters.
+- When unsure return no_op with a clarifying message.
+`;
+
+async function callLLM(userMessage, context) {
+  // const result = callOllama(SYSTEM_PROMPT, userMessage, context);
+  const result = callOpenAI(SYSTEM_PROMPT, userMessage, context);
+  return result;
 }
 
 function validateLLMResult(obj){

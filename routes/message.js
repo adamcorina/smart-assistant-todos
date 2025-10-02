@@ -1,4 +1,4 @@
-const { SYSTEM_PROMPT, callLLM, validateLLMResult } = require('../services/llm');
+const { callLLM, validateLLMResult } = require('../services/llm/llm');
 const { addNote, listNotes, updateNote, deleteNote } = require('../services/notes');
 
 async function handleMessage(req, res) {
@@ -9,7 +9,7 @@ async function handleMessage(req, res) {
 
   let llmResult;
   try {
-    llmResult = await callLLM(SYSTEM_PROMPT, userText, { notes_snapshot: snapshot });
+    llmResult = await callLLM(userText, { notes_snapshot: snapshot });
   } catch (e) {
     return res.status(500).json({ error: 'llm_call_failed', detail: String(e) });
   }

@@ -17,7 +17,7 @@ async function addNote(text) {
       updated_at: nowIso(),
     };
     notes.push(newNote);
-    return newNote;
+    return notes;
   });
 }
 async function listNotes({ filter = 'all', limit = null } = {}) {
@@ -47,7 +47,7 @@ async function updateNote(id, { text = null, status = null } = {}) {
       notes[idx].status = status;
     }
     notes[idx].updated_at = nowIso();
-    return notes[idx];
+    return notes;
   });
 }
 
@@ -59,6 +59,7 @@ async function deleteNote(id) {
     // Mutate the original array for persistence
     notes.length = 0;
     notes.push(...newNotes);
+    return notes;
   });
 }
 

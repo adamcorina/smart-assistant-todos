@@ -23,6 +23,7 @@
     "dotenv": "*",
     "express": "*",
     "ollama": "^0.6.0",
+    "openai": "^6.0.1",
     "uuid": "*"
   },
   "devDependencies": {
