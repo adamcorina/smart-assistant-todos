@@ -5,7 +5,7 @@ async function handleMessage(req, res) {
   const userText = req.body && req.body.text;
   if (typeof userText !== 'string') return res.status(400).json({ error: 'text required' });
 
-  const snapshot = await listNotes({ filter: 'all', limit: 10 });
+  const snapshot = await listNotes({ filter: 'all' });
 
   let llmResult;
   try {
@@ -21,23 +21,23 @@ async function handleMessage(req, res) {
 
   try {
     if (action === 'add_note') {
-      const note = await addNote(args.text);
-      return res.json({ message: 'Note added', note });
+      const notes = await addNote(args.text);
+      return res.json({ message: 'Note added', notes });
     }
     if (action === 'list_notes') {
       const notes = await listNotes({ filter: args.filter || 'all', limit: args.limit ?? null });
       return res.json({ notes });
     }
     if (action === 'update_note') {
-      const note = await updateNote(args.id, { text: ('text' in args) ? args.text : null, status: ('status' in args) ? args.status : null });
-      return res.json({ message: 'Note updated', note });
+      const notes = await updateNote(args.id, { text: ('text' in args) ? args.text : null, status: ('status' in args) ? args.status : null });
+      return res.json({ message: 'Note updated', notes });
     }
     if (action === 'delete_note') {
-      await deleteNote(args.id);
-      return res.json({ message: 'Note deleted', id: args.id });
+      const notes = await deleteNote(args.id);
+      return res.json({ message: 'Note deleted', notes });
     }
     if (action === 'no_op') {
-      return res.json({ message: args.message });
+      return res.json({ message: args.message, notes: snapshot });
     }
     return res.status(400).json({ error: 'unknown_action' });
   } catch (e) {

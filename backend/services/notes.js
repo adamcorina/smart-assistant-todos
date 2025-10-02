@@ -57,9 +57,7 @@ async function deleteNote(id) {
     const newNotes = notes.filter(n => n.id !== id);
     if (newNotes.length === notes.length) throw new Error('note not found');
     // Mutate the original array for persistence
-    notes.length = 0;
-    notes.push(...newNotes);
-    return notes;
+    return newNotes;
   });
 }
 
