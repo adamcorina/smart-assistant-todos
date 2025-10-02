@@ -1,7 +1,7 @@
 {
-  "name": "notes-agent",
+  "name": "notes-assistant",
   "version": "0.1.0",
-  "description": "LLM-driven Notes CRUD assistant (Ollama + gpt-oss:20b)",
+  "description": "LLM-driven Notes CRUD assistant",
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
